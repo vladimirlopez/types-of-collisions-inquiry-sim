@@ -90,6 +90,7 @@ h4 {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.2rem 1.4rem;
+  padding-right: 12.5rem;
   background: linear-gradient(130deg, rgba(20, 25, 36, 0.95), rgba(11, 13, 19, 0.95));
   box-shadow: var(--shadow-lg);
   position: relative;
@@ -148,9 +149,11 @@ body[data-theme="light"] .hero {
 
 .display-toggle {
   min-width: 156px;
-  flex: 0 0 auto;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   padding-inline: 1rem;
-  align-self: center;
+  z-index: 2;
 }
 
 .app-layout {
@@ -550,11 +553,15 @@ body[data-theme="light"] .bg-grid {
     flex-direction: column;
   }
 
+  .hero {
+    padding-right: 1.4rem;
+  }
+
   .display-toggle {
+    position: static;
     min-width: 0;
-    width: 100%;
+    width: auto;
     max-width: 220px;
-    align-self: flex-start;
   }
 }
 
