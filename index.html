@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Types of Collisions Simulation | The Thinking Experiment</title>
+    <meta
+      name="description"
+      content="An inquiry-based Vernier style collision simulation for studying momentum and kinetic energy."
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://vladimirlopez.github.io/the-thinking-experiment/assets/favicon-32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="https://vladimirlopez.github.io/the-thinking-experiment/assets/favicon-16.png"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <header class="hero shell">
+      <div class="hero-top">
+        <div>
+          <p class="kicker">The Thinking Experiment</p>
+          <h1>Types of Collisions Inquiry Lab</h1>
+          <p class="subtitle">
+            Use this simulation like the Vernier collision lab: predict final velocities, run a trial, and test whether
+            momentum and kinetic energy are conserved.
+          </p>
+        </div>
+        <button id="themeToggleBtn" class="display-toggle" type="button">Light mode</button>
+      </div>
+    </header>
+
+    <main class="shell app-layout">
+      <section class="panel full">
+        <h2>Learning Objective</h2>
+        <p class="hint">
+          Determine whether momentum and kinetic energy are conserved in fully inelastic, partially inelastic, and perfectly
+          elastic collisions. Use the sliders to set cart masses and launch velocities, run the trial, then compare initial
+          and final values.
+        </p>
+        <div class="inquiry-grid">
+          <article class="inquiry-card">
+            <h3>Step 1 · Predict</h3>
+            <p>
+              Choose a collision type and set your initial values. Enter your prediction for momentum and kinetic energy
+              conservation before pressing <strong>Run Trial</strong>.
+            </p>
+          </article>
+          <article class="inquiry-card">
+            <h3>Step 2 · Collect</h3>
+            <p>Watch the simulation and read the live kinematic states in the analysis panel, especially the values immediately before and after impact.</p>
+          </article>
+          <article class="inquiry-card">
+            <h3>Step 3 · Compare</h3>
+            <p>Use percent difference to judge conservation. In this simulation, <strong>close to 10%</strong> or less is acceptable.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel wide">
+        <h2>Cart Interaction</h2>
+        <div class="sim-toolbar">
+          <div>
+            <p id="statusLine" class="hint" role="status">Set up a trial and click Run.</p>
+            <p id="scoreLine" class="hint" role="status" aria-live="polite"></p>
+          </div>
+          <div class="scenario-row">
+            <button type="button" data-preset="full">Preset: Fully Inelastic</button>
+            <button type="button" data-preset="partial">Preset: Partial (e = 0.40)</button>
+            <button type="button" data-preset="perfect">Preset: Perfectly Elastic</button>
+            <button type="button" data-preset="explosion">Preset: Explosion</button>
+          </div>
+        </div>
+
+        <canvas id="trackCanvas" class="sim-canvas" width="1200" height="300"></canvas>
+        <h3>Velocity-Time Snapshot</h3>
+        <canvas id="graphCanvas" class="sim-canvas" width="1200" height="240"></canvas>
+        <p id="probeReadout" class="hint" aria-live="polite"></p>
+      </section>
+
+      <section class="panel narrow">
+        <h2>Controls</h2>
+        <div class="controls-grid">
+          <label>
+            Activity Mode
+            <select id="activityMode">
+              <option value="inquiry">Inquiry Lab</option>
+              <option value="test">Test Your Knowledge</option>
+            </select>
+          </label>
+
+          <label>
+            Collision Type
+            <select id="collisionMode">
+              <option value="full">Fully Inelastic (stick)</option>
+              <option value="partial">Partially Inelastic</option>
+              <option value="perfect">Perfectly Elastic</option>
+              <option value="explosion">Explosion (same start, split)</option>
+            </select>
+          </label>
+
+          <label>
+            Restitution  e
+            <div class="range-row">
+              <input id="restitution" type="range" min="0.00" max="1.00" step="0.05" value="0.40" />
+              <output id="restitutionValue">0.40</output>
+            </div>
+            <span class="control-note">
+              Restitution measures how strongly the carts rebound. `e = 0` is an ideal stick-together collision and `e = 1` is an ideal perfectly elastic rebound.
+            </span>
+          </label>
+
+          <label>
+            Cart A Mass (kg)
+            <div class="range-row">
+              <input id="mass1" type="range" min="0.3" max="2.2" step="0.1" value="0.85" />
+              <output id="mass1Value">0.85</output>
+            </div>
+          </label>
+
+          <label>
+            Cart B Mass (kg)
+            <div class="range-row">
+              <input id="mass2" type="range" min="0.3" max="2.2" step="0.1" value="1.05" />
+              <output id="mass2Value">1.05</output>
+            </div>
+          </label>
+
+          <label>
+            Cart A Initial Velocity (m/s)
+            <div class="range-row">
+              <input id="velocity1" type="range" min="-2.5" max="2.5" step="0.05" value="1.30" />
+              <output id="velocity1Value">1.30</output>
+            </div>
+          </label>
+
+          <label>
+            Cart B Initial Velocity (m/s)
+            <div class="range-row">
+              <input id="velocity2" type="range" min="-2.5" max="2.5" step="0.05" value="0.00" />
+              <output id="velocity2Value">0.00</output>
+            </div>
+          </label>
+
+          <label class="control-span-2">
+            Track friction coefficient
+            <div class="range-row">
+              <input id="friction" type="range" min="0.00" max="0.20" step="0.005" value="0.00" />
+              <output id="frictionValue">0.000</output>
+            </div>
+          </label>
+
+          <label class="compact-toggle control-span-2">
+            <input id="showDetails" type="checkbox" checked />
+            Show detailed readouts
+          </label>
+
+        </div>
+
+        <div class="button-row">
+          <button id="runBtn" type="button">Run Trial</button>
+          <button id="pauseBtn" type="button" class="ghost">Pause</button>
+          <button id="resetBtn" type="button" class="ghost">Reset</button>
+        </div>
+
+        <div class="metric-grid" id="metricsPanel"></div>
+        <h2>Conservation Check</h2>
+        <div class="check-grid">
+          <label id="gameModeHint">
+            Collision type guess
+            <select id="gameCollisionGuess">
+              <option value="full">Fully Inelastic</option>
+              <option value="partial">Partially Inelastic</option>
+              <option value="perfect">Perfectly Elastic</option>
+              <option value="explosion">Explosion</option>
+            </select>
+          </label>
+          <label>
+            Momentum:
+            <select id="momentumGuess">
+              <option value="conserved">Conserved</option>
+              <option value="not-conserved">Not conserved</option>
+            </select>
+          </label>
+          <label>
+            Kinetic energy:
+            <select id="energyGuess">
+              <option value="conserved">Conserved</option>
+              <option value="decreased">Decreased</option>
+              <option value="increased">Increased</option>
+              <option value="not-conserved">Not conserved</option>
+            </select>
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="newChallengeBtn" type="button" class="ghost">New Challenge</button>
+        </div>
+        <div class="button-row">
+          <button id="checkBtn" type="button" class="ghost">Check My Conclusions</button>
+        </div>
+        <p id="feedback" class="hint"></p>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
