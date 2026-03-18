@@ -1243,7 +1243,7 @@ function renderGraph() {
     ctx.fillStyle = palette.graphText;
     ctx.fillText(`${v}`, 6, y + 3);
     ctx.beginPath();
-    ctx.strokeStyle = Math.abs(Number(v)) < 0.05 ? palette.lineA : palette.graphGrid;
+    ctx.strokeStyle = Math.abs(Number(v)) < 0.05 ? palette.graphAxis : palette.graphGrid;
     ctx.moveTo(left, y);
     ctx.lineTo(right, y);
     ctx.stroke();
