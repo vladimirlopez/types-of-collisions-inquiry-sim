@@ -136,6 +136,10 @@ function setupInputs() {
 
   numberInputs.forEach(([input, output, formatter]) => {
     input.addEventListener("input", () => {
+      if (input === velocity1Input && modeSelect.value === "explosion") {
+        velocity2Input.value = velocity1Input.value;
+        velocity2Value.value = formatter(Number(velocity1Input.value));
+      }
       output.value = formatter(Number(input.value));
       syncControlState();
     });
@@ -196,6 +200,15 @@ function syncControlState() {
   } else {
     restitutionInput.disabled = false;
   }
+
+  if (mode === "explosion") {
+    velocity2Input.disabled = true;
+    velocity2Input.value = velocity1Input.value;
+    velocity2Value.value = formatNumber(Number(velocity1Input.value));
+  } else {
+    velocity2Input.disabled = false;
+  }
+
   restitutionValue.value = mode === "full" || mode === "perfect" ? formatNumber(Number(restitutionInput.value)) : formatNumber(Number(restitutionInput.value));
 }
 
@@ -256,10 +269,7 @@ function generateChallenge() {
   } else {
     e = randRange(0.25, 0.8, 0.05);
     v1 = randRange(-0.6, 0.6, 0.05);
-    v2 = randRange(-0.6, 0.6, 0.05);
-    if (Math.abs(v1 - v2) < 0.12) {
-      v2 += 0.25;
-    }
+    v2 = v1;
   }
 
   state.challenge = {
